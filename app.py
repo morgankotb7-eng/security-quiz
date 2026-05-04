@@ -4,7 +4,7 @@ import time
 # Page Configuration
 st.set_page_config(page_title="Juhayna Cyber-Challenge", page_icon="🛡️", layout="centered")
 
-# Custom Styling
+# Custom Styling (CSS)
 st.markdown("""
     <style>
     .main { background-color: #f8f9fa; }
@@ -19,12 +19,13 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
+# Main Titles
 st.title("🛡️ Corporate Cybersecurity Assessment")
 st.subheader("Test Your Defense Readiness")
-st.write("Prepared by: **Mohamed Kotb** | IT Operations Lead")
+st.write("Prepared by: **Mohamed Kotb**")
 st.divider()
 
-# 10 Professional & Engaging Questions
+# Question Bank (10 Professional English Questions)
 questions = [
     {
         "q": "1. You receive an email from 'IT-Support' with a PDF titled 'New Salary Scale 2026'. The sender's email is 'support@juhayna-office.com'. What is your first action?",
@@ -88,11 +89,13 @@ questions = [
     }
 ]
 
-# Quiz State logic
-if 'score' not in st.session_state:
-    st.session_state.score = 0
-
+# Employee Data Entry and Questions
 with st.form("quiz_form"):
+    st.subheader("📋 Employee Information")
+    emp_name = st.text_input("Full Name")
+    emp_dept = st.text_input("Department")
+    st.divider()
+    
     user_answers = []
     for i, item in enumerate(questions):
         st.markdown(f"**Question {i+1}:** {item['q']}")
@@ -102,26 +105,31 @@ with st.form("quiz_form"):
 
     submitted = st.form_submit_button("Submit Assessment")
 
+# Processing Results
 if submitted:
-    if None in user_answers:
-        st.warning("⚠️ Please complete all 10 questions before submitting.")
+    if not emp_name or not emp_dept:
+        st.warning("⚠️ Please enter your Name and Department before submitting.")
+    elif None in user_answers:
+        st.warning("⚠️ Please answer all 10 questions.")
     else:
         score = 0
         for i, item in enumerate(questions):
             if user_answers[i] == item["answer"]:
                 score += 1
             else:
-                st.error(f"❌ Q{i+1} was wrong. {item['feedback']}")
+                st.error(f"❌ Q{i+1}: Incorrect. {item['feedback']}")
         
         st.divider()
         final_pct = (score / len(questions)) * 100
         
+        st.header(f"Employee: {emp_name}")
         if final_pct >= 90:
             st.balloons()
             st.success(f"🏆 Score: {score}/10 - Expert Level! You are a Security Champion.")
         elif final_pct >= 70:
             st.warning(f"🥈 Score: {score}/10 - Good, but stay vigilant.")
         else:
-            st.error(f"🚨 Score: {score}/10 - High Risk! Please attend the next IT Security briefing.")
+            st.error(f"🚨 Score: {score}/10 - High Risk! Please contact IT for a briefing.")
 
+# Footer in English
 st.caption("© 2026 | Developed for Juhayna Excellence by Mohamed Kotb")
